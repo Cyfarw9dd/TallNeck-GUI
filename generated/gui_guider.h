@@ -65,7 +65,7 @@ LV_IMG_DECLARE(_sat_alpha_64x64);
 LV_FONT_DECLARE(lv_font_montserratMedium_12)
 LV_FONT_DECLARE(lv_font_NotoSans_VariableFont_wdth_wght_24)
 LV_FONT_DECLARE(lv_font_montserratMedium_16)
-
+LV_FONT_DECLARE(lv_customer_font_montserratMedium_20)
 
 #ifdef __cplusplus
 }

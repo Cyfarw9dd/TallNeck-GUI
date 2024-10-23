@@ -96,7 +96,7 @@ void setup_scr_screen(lv_ui *ui)
     lv_style_set_pad_bottom(&style_screen_list_1_extra_btns_main_default, 5);
     lv_style_set_border_width(&style_screen_list_1_extra_btns_main_default, 0);
     lv_style_set_text_color(&style_screen_list_1_extra_btns_main_default, lv_color_hex(0x0D3055));
-    lv_style_set_text_font(&style_screen_list_1_extra_btns_main_default, &lv_font_montserratMedium_12);
+    lv_style_set_text_font(&style_screen_list_1_extra_btns_main_default, &lv_customer_font_montserratMedium_20);
     lv_style_set_text_opa(&style_screen_list_1_extra_btns_main_default, 255);
     lv_style_set_radius(&style_screen_list_1_extra_btns_main_default, 3);
     lv_style_set_bg_opa(&style_screen_list_1_extra_btns_main_default, 255);
