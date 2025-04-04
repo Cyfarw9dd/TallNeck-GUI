@@ -15,7 +15,6 @@
 #include "custom.h"
 
 
-
 void setup_scr_screen(lv_ui *ui)
 {
     //Write codes screen
@@ -53,8 +52,9 @@ void setup_scr_screen(lv_ui *ui)
     ui->screen_list_1_item1 = lv_list_add_btn(ui->screen_list_1, &_time_alpha_60x60, "Time sync");
     ui->screen_list_1_item2 = lv_list_add_btn(ui->screen_list_1, &_file_search_alpha_60x60, "File info");
     ui->screen_list_1_item3 = lv_list_add_btn(ui->screen_list_1, &_download_alpha_60x60, "Download TLE");
+    ui->screen_list_1_item4 = lv_list_add_btn(ui->screen_list_1, &_eph_grey_alpha_60x60, "Sync Location");
     lv_obj_set_pos(ui->screen_list_1, 0, 79);
-    lv_obj_set_size(ui->screen_list_1, 240, 292);
+    lv_obj_set_size(ui->screen_list_1, 240, 360);
     lv_obj_set_scrollbar_mode(ui->screen_list_1, LV_SCROLLBAR_MODE_ACTIVE);
 
     //Write style state: LV_STATE_DEFAULT for &style_screen_list_1_main_main_default
@@ -106,6 +106,7 @@ void setup_scr_screen(lv_ui *ui)
     lv_obj_add_style(ui->screen_list_1_item2, &style_screen_list_1_extra_btns_main_default, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_add_style(ui->screen_list_1_item1, &style_screen_list_1_extra_btns_main_default, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_add_style(ui->screen_list_1_item0, &style_screen_list_1_extra_btns_main_default, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_add_style(ui->screen_list_1_item4, &style_screen_list_1_extra_btns_main_default, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //Write style state: LV_STATE_DEFAULT for &style_screen_list_1_extra_texts_main_default
     static lv_style_t style_screen_list_1_extra_texts_main_default;

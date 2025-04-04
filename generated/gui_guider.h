@@ -26,6 +26,7 @@ typedef struct
 	lv_obj_t *screen_list_1_item1;
 	lv_obj_t *screen_list_1_item2;
 	lv_obj_t *screen_list_1_item3;
+	lv_obj_t *screen_list_1_item4;
 	lv_obj_t *screen_cont_2;
 	lv_obj_t *screen_img_1;
 	lv_obj_t *screen_label_1;
@@ -61,6 +62,7 @@ LV_IMG_DECLARE(_time_alpha_60x60);
 LV_IMG_DECLARE(_file_search_alpha_60x60);
 LV_IMG_DECLARE(_download_alpha_60x60);
 LV_IMG_DECLARE(_sat_alpha_64x64);
+LV_IMG_DECLARE(_eph_grey_alpha_60x60);
 
 LV_FONT_DECLARE(lv_font_montserratMedium_12)
 LV_FONT_DECLARE(lv_font_NotoSans_VariableFont_wdth_wght_24)
