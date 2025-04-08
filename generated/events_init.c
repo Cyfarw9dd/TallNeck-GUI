@@ -19,6 +19,18 @@
 #include "freemaster_client.h"
 #endif
 
+// 添加一个事件处理函数来阻止列表区域的水平滑动
+void list_container_event_handler(lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    if (code == LV_EVENT_GESTURE) {
+        lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
+        if (dir == LV_DIR_LEFT || dir == LV_DIR_RIGHT) {
+            // 阻止水平方向的滑动
+            lv_indev_wait_release(lv_indev_get_act());
+        }
+    }
+}
 
 static void screen_event_handler (lv_event_t *e)
 {

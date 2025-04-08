@@ -14,6 +14,8 @@
 #include "widgets_init.h"
 #include "custom.h"
 
+// 声明list_container_event_handler函数
+extern void list_container_event_handler(lv_event_t *e);
 
 void setup_scr_screen(lv_ui *ui)
 {
@@ -46,17 +48,39 @@ void setup_scr_screen(lv_ui *ui)
     lv_obj_set_style_pad_right(ui->screen_cont_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_width(ui->screen_cont_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 
+    // 创建一个新的容器来包裹列表
+    lv_obj_t *list_container = lv_obj_create(ui->screen_cont_1);
+    lv_obj_set_pos(list_container, 0, 79);
+    lv_obj_set_size(list_container, 240, 360);
+    lv_obj_set_scrollbar_mode(list_container, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_set_scroll_dir(list_container, LV_DIR_VER);
+    lv_obj_clear_flag(list_container, LV_OBJ_FLAG_SCROLLABLE);  // 禁用容器的滚动
+    lv_obj_set_style_border_width(list_container, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(list_container, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_all(list_container, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_add_event_cb(list_container, list_container_event_handler, LV_EVENT_ALL, NULL);
+
     //Write codes screen_list_1
-    ui->screen_list_1 = lv_list_create(ui->screen_cont_1);
-    lv_obj_add_flag(ui->screen_list_1, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
+    ui->screen_list_1 = lv_list_create(list_container);
+    lv_obj_set_scroll_dir(ui->screen_list_1, LV_DIR_VER);  // 只允许垂直滚动
+    lv_obj_clear_flag(ui->screen_list_1, LV_OBJ_FLAG_SCROLL_MOMENTUM);  // 禁用惯性滚动
+    lv_obj_clear_flag(ui->screen_list_1, LV_OBJ_FLAG_SCROLL_CHAIN);  // 禁用滚动链
+    lv_obj_clear_flag(ui->screen_list_1, LV_OBJ_FLAG_SCROLL_ELASTIC);  // 禁用弹性滚动
     ui->screen_list_1_item0 = lv_list_add_btn(ui->screen_list_1, &_orbit_alpha_60x60, "Orbit tracking");
     ui->screen_list_1_item1 = lv_list_add_btn(ui->screen_list_1, &_time_alpha_60x60, "Time sync");
     ui->screen_list_1_item2 = lv_list_add_btn(ui->screen_list_1, &_file_search_alpha_60x60, "File info");
     ui->screen_list_1_item3 = lv_list_add_btn(ui->screen_list_1, &_download_alpha_60x60, "Download TLE");
     ui->screen_list_1_item4 = lv_list_add_btn(ui->screen_list_1, &_eph_grey_alpha_60x60, "Sync Location");
-    lv_obj_set_pos(ui->screen_list_1, 0, 79);
+    lv_obj_set_pos(ui->screen_list_1, 0, 0);
     lv_obj_set_size(ui->screen_list_1, 240, 360);
     lv_obj_set_scrollbar_mode(ui->screen_list_1, LV_SCROLLBAR_MODE_ACTIVE);
+
+    // 为每个列表项禁用水平滚动
+    lv_obj_set_scroll_dir(ui->screen_list_1_item0, LV_DIR_VER);
+    lv_obj_set_scroll_dir(ui->screen_list_1_item1, LV_DIR_VER);
+    lv_obj_set_scroll_dir(ui->screen_list_1_item2, LV_DIR_VER);
+    lv_obj_set_scroll_dir(ui->screen_list_1_item3, LV_DIR_VER);
+    lv_obj_set_scroll_dir(ui->screen_list_1_item4, LV_DIR_VER);
 
     //Write style state: LV_STATE_DEFAULT for &style_screen_list_1_main_main_default
     static lv_style_t style_screen_list_1_main_main_default;
