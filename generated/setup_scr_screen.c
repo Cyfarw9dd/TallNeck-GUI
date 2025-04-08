@@ -48,6 +48,7 @@ void setup_scr_screen(lv_ui *ui)
 
     //Write codes screen_list_1
     ui->screen_list_1 = lv_list_create(ui->screen_cont_1);
+    lv_obj_add_flag(ui->screen_list_1, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
     ui->screen_list_1_item0 = lv_list_add_btn(ui->screen_list_1, &_orbit_alpha_60x60, "Orbit tracking");
     ui->screen_list_1_item1 = lv_list_add_btn(ui->screen_list_1, &_time_alpha_60x60, "Time sync");
     ui->screen_list_1_item2 = lv_list_add_btn(ui->screen_list_1, &_file_search_alpha_60x60, "File info");
