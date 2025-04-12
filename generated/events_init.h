@@ -20,6 +20,8 @@ void events_init(lv_ui *ui);
 
 void events_init_screen(lv_ui *ui);
 
+void events_init_orbit_tracking(lv_ui *ui);
+
 // 声明list_container_event_handler函数
 void list_container_event_handler(lv_event_t *e);
 

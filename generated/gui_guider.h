@@ -30,6 +30,13 @@ typedef struct
 	lv_obj_t *screen_cont_2;
 	lv_obj_t *screen_img_1;
 	lv_obj_t *screen_label_1;
+
+	// Orbit tracking screen
+	lv_obj_t *orbit_tracking_screen;
+	bool orbit_tracking_screen_del;
+	lv_obj_t *orbit_tracking_cont;
+	lv_obj_t *orbit_tracking_img;
+	lv_obj_t *orbit_tracking_label;
 }lv_ui;
 
 typedef void (*ui_setup_scr_t)(lv_ui * ui);
@@ -53,6 +60,7 @@ extern lv_ui guider_ui;
 
 
 void setup_scr_screen(lv_ui *ui);
+void setup_scr_orbit_tracking(lv_ui *ui);
 LV_IMG_DECLARE(_orbit_alpha_60x60);
 LV_IMG_DECLARE(_time_alpha_60x60);
 LV_IMG_DECLARE(_file_search_alpha_60x60);

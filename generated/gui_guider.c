@@ -74,8 +74,8 @@ void ui_animation(void * var, int32_t duration, int32_t delay, int32_t start_val
 
 void init_scr_del_flag(lv_ui *ui)
 {
-
     ui->screen_del = true;
+    ui->orbit_tracking_screen_del = false;
 }
 
 void setup_ui(lv_ui *ui)

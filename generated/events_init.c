@@ -19,6 +19,8 @@
 #include "freemaster_client.h"
 #endif
 
+#include "gui_guider.h"
+
 // 添加一个事件处理函数来阻止列表区域的水平滑动
 void list_container_event_handler(lv_event_t *e)
 {
@@ -55,13 +57,16 @@ static void screen_event_handler (lv_event_t *e)
     }
 }
 
+// 合并orbit_tracking按钮的事件处理函数
 static void screen_list_1_item0_event_handler (lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     switch (code) {
     case LV_EVENT_CLICKED:
     {
-        
+        // 点击时切换到orbit_tracking屏幕
+        setup_scr_orbit_tracking(&guider_ui);
+        lv_scr_load(guider_ui.orbit_tracking_screen);
         break;
     }
     default:
@@ -125,17 +130,74 @@ static void screen_list_1_item4_event_handler (lv_event_t *e)
     }
 }
 
+// 添加orbit_tracking屏幕的事件处理函数
+static void orbit_tracking_screen_event_handler(lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    switch (code) {
+    case LV_EVENT_GESTURE:
+    {
+        lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
+        switch(dir) {
+        case LV_DIR_RIGHT:
+        {
+            // 向右滑动返回主屏幕
+            lv_scr_load(guider_ui.screen);
+            break;
+        }
+        default:
+            break;
+        }
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 void events_init_screen (lv_ui *ui)
 {
-    lv_obj_add_event_cb(ui->screen, screen_event_handler, LV_EVENT_ALL, ui);
-    lv_obj_add_event_cb(ui->screen_list_1_item0, screen_list_1_item0_event_handler, LV_EVENT_ALL, ui);
-    lv_obj_add_event_cb(ui->screen_list_1_item1, screen_list_1_item1_event_handler, LV_EVENT_ALL, ui);
-    lv_obj_add_event_cb(ui->screen_list_1_item2, screen_list_1_item2_event_handler, LV_EVENT_ALL, ui);
-    lv_obj_add_event_cb(ui->screen_list_1_item3, screen_list_1_item3_event_handler, LV_EVENT_ALL, ui);
-    lv_obj_add_event_cb(ui->screen_list_1_item4, screen_list_1_item4_event_handler, LV_EVENT_ALL, ui);
+    // 使用更安全的方式注册事件处理函数
+    if (ui->screen != NULL) {
+        lv_obj_add_event_cb(ui->screen, screen_event_handler, LV_EVENT_ALL, ui);
+    }
+    
+    if (ui->screen_list_1_item0 != NULL) {
+        lv_obj_add_event_cb(ui->screen_list_1_item0, screen_list_1_item0_event_handler, LV_EVENT_ALL, ui);
+    }
+    
+    if (ui->screen_list_1_item1 != NULL) {
+        lv_obj_add_event_cb(ui->screen_list_1_item1, screen_list_1_item1_event_handler, LV_EVENT_ALL, ui);
+    }
+    
+    if (ui->screen_list_1_item2 != NULL) {
+        lv_obj_add_event_cb(ui->screen_list_1_item2, screen_list_1_item2_event_handler, LV_EVENT_ALL, ui);
+    }
+    
+    if (ui->screen_list_1_item3 != NULL) {
+        lv_obj_add_event_cb(ui->screen_list_1_item3, screen_list_1_item3_event_handler, LV_EVENT_ALL, ui);
+    }
+    
+    if (ui->screen_list_1_item4 != NULL) {
+        lv_obj_add_event_cb(ui->screen_list_1_item4, screen_list_1_item4_event_handler, LV_EVENT_ALL, ui);
+    }
+}
+
+void events_init_orbit_tracking(lv_ui *ui)
+{
+    // 使用更安全的方式注册事件处理函数
+    if (ui->orbit_tracking_screen != NULL) {
+        lv_obj_add_event_cb(ui->orbit_tracking_screen, orbit_tracking_screen_event_handler, LV_EVENT_ALL, ui);
+    }
 }
 
 void events_init(lv_ui *ui)
 {
-
+    // 先初始化主屏幕事件
+    events_init_screen(ui);
+    
+    // 只有在orbit_tracking屏幕已经创建的情况下才初始化其事件
+    if (ui->orbit_tracking_screen != NULL) {
+        events_init_orbit_tracking(ui);
+    }
 }
