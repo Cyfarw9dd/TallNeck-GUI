@@ -37,6 +37,11 @@ typedef struct
 	lv_obj_t *orbit_tracking_cont;
 	lv_obj_t *orbit_tracking_img;
 	lv_obj_t *orbit_tracking_label;
+	
+	// Satellite list
+	lv_obj_t *satellite_list;
+	lv_obj_t *satellite_list_cont;
+	lv_obj_t *satellite_items[10];  // 存储10个卫星列表项
 }lv_ui;
 
 typedef void (*ui_setup_scr_t)(lv_ui * ui);

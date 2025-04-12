@@ -90,6 +90,60 @@ void setup_scr_orbit_tracking(lv_ui *ui)
     lv_obj_set_style_pad_all(ui->orbit_tracking_label, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_width(ui->orbit_tracking_label, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 
+    // Create satellite list container
+    ui->satellite_list_cont = lv_obj_create(ui->orbit_tracking_screen);
+    if (ui->satellite_list_cont == NULL) {
+        lv_obj_del(ui->orbit_tracking_screen);
+        ui->orbit_tracking_screen = NULL;
+        return;
+    }
+    
+    lv_obj_set_pos(ui->satellite_list_cont, 0, 81);
+    lv_obj_set_size(ui->satellite_list_cont, 240, 455);
+    lv_obj_set_scrollbar_mode(ui->satellite_list_cont, LV_SCROLLBAR_MODE_AUTO);
+    
+    // Set container style
+    lv_obj_set_style_bg_opa(ui->satellite_list_cont, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui->satellite_list_cont, lv_color_hex(0xffffff), LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui->satellite_list_cont, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_all(ui->satellite_list_cont, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    
+    // Create satellite list
+    ui->satellite_list = lv_list_create(ui->satellite_list_cont);
+    if (ui->satellite_list == NULL) {
+        lv_obj_del(ui->orbit_tracking_screen);
+        ui->orbit_tracking_screen = NULL;
+        return;
+    }
+    
+    lv_obj_set_size(ui->satellite_list, 240, 455);
+    lv_obj_set_style_bg_opa(ui->satellite_list, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui->satellite_list, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_all(ui->satellite_list, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    
+    // Add satellite items
+    const char* satellites[] = {
+        "OSCAR 7 (AO-7)",
+        "PHASE 3B (AO-10)",
+        "UOSAT 2 (UO-11)",
+        "LUSAT (LO-19)",
+        "EYESAT A (AO-27)",
+        "ITAMSAT (IO-26)",
+        "RADIO ROSTO (RS-15)",
+        "JAS-2 (FO-29)",
+        "TECHSAT 1B (GO-32)",
+        "ISS (ZARYA)"
+    };
+    
+    for (int i = 0; i < 10; i++) {
+        ui->satellite_items[i] = lv_list_add_btn(ui->satellite_list, NULL, satellites[i]);
+        if (ui->satellite_items[i] != NULL) {
+            lv_obj_set_style_text_font(ui->satellite_items[i], &lv_font_NotoSans_VariableFont_wdth_wght_24, LV_PART_MAIN|LV_STATE_DEFAULT);
+            lv_obj_set_style_pad_all(ui->satellite_items[i], 15, LV_PART_MAIN|LV_STATE_DEFAULT);
+            lv_obj_set_style_text_color(ui->satellite_items[i], lv_color_hex(0x000000), LV_PART_MAIN|LV_STATE_DEFAULT);
+        }
+    }
+
     // Update current screen layout
     lv_obj_update_layout(ui->orbit_tracking_screen);
     

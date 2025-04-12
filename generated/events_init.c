@@ -155,6 +155,24 @@ static void orbit_tracking_screen_event_handler(lv_event_t *e)
     }
 }
 
+// 卫星列表项点击事件处理
+static void satellite_item_event_handler(lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t *target = lv_event_get_target(e);
+    
+    if (code == LV_EVENT_CLICKED) {
+        // 获取被点击的列表项索引
+        for (int i = 0; i < 10; i++) {
+            if (target == guider_ui.satellite_items[i]) {
+                // TODO: 处理卫星选择事件
+                // 这里可以添加选择卫星后的处理逻辑
+                break;
+            }
+        }
+    }
+}
+
 void events_init_screen (lv_ui *ui)
 {
     // 使用更安全的方式注册事件处理函数
@@ -188,6 +206,13 @@ void events_init_orbit_tracking(lv_ui *ui)
     // 使用更安全的方式注册事件处理函数
     if (ui->orbit_tracking_screen != NULL) {
         lv_obj_add_event_cb(ui->orbit_tracking_screen, orbit_tracking_screen_event_handler, LV_EVENT_ALL, ui);
+    }
+
+    // 为每个卫星列表项添加事件处理
+    for (int i = 0; i < 10; i++) {
+        if (ui->satellite_items[i] != NULL) {
+            lv_obj_add_event_cb(ui->satellite_items[i], satellite_item_event_handler, LV_EVENT_CLICKED, NULL);
+        }
     }
 }
 
