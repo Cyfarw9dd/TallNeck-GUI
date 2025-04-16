@@ -66,11 +66,11 @@ void setup_scr_screen(lv_ui *ui)
     lv_obj_clear_flag(ui->screen_list_1, LV_OBJ_FLAG_SCROLL_MOMENTUM);  // 禁用惯性滚动
     lv_obj_clear_flag(ui->screen_list_1, LV_OBJ_FLAG_SCROLL_CHAIN);  // 禁用滚动链
     lv_obj_clear_flag(ui->screen_list_1, LV_OBJ_FLAG_SCROLL_ELASTIC);  // 禁用弹性滚动
-    ui->screen_list_1_item0 = lv_list_add_btn(ui->screen_list_1, &_orbit_alpha_60x60, "Orbit tracking");
-    ui->screen_list_1_item1 = lv_list_add_btn(ui->screen_list_1, &_time_alpha_60x60, "Time sync");
-    ui->screen_list_1_item2 = lv_list_add_btn(ui->screen_list_1, &_file_search_alpha_60x60, "File info");
+    ui->screen_list_1_item0 = lv_list_add_btn(ui->screen_list_1, &_orbit_alpha_60x60, "Orbit Tracking");
+    ui->screen_list_1_item1 = lv_list_add_btn(ui->screen_list_1, &_time_alpha_60x60, "Sync Time");
+    ui->screen_list_1_item2 = lv_list_add_btn(ui->screen_list_1, &_file_search_alpha_60x60, "File Search");
     ui->screen_list_1_item3 = lv_list_add_btn(ui->screen_list_1, &_download_alpha_60x60, "Download TLE");
-    ui->screen_list_1_item4 = lv_list_add_btn(ui->screen_list_1, &_eph_grey_alpha_60x60, "Sync Location");
+    ui->screen_list_1_item4 = lv_list_add_btn(ui->screen_list_1, &_eph_grey_alpha_60x60, "Update GPS");
     lv_obj_set_pos(ui->screen_list_1, 0, 0);
     lv_obj_set_size(ui->screen_list_1, 240, 360);
     lv_obj_set_scrollbar_mode(ui->screen_list_1, LV_SCROLLBAR_MODE_ACTIVE);

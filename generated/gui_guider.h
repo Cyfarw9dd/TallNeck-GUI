@@ -27,6 +27,7 @@ typedef struct
 	lv_obj_t *screen_list_1_item2;
 	lv_obj_t *screen_list_1_item3;
 	lv_obj_t *screen_list_1_item4;
+	lv_obj_t *screen_list_1_item5;
 	lv_obj_t *screen_cont_2;
 	lv_obj_t *screen_img_1;
 	lv_obj_t *screen_label_1;
@@ -42,6 +43,22 @@ typedef struct
 	lv_obj_t *satellite_list;
 	lv_obj_t *satellite_list_cont;
 	lv_obj_t *satellite_items[10];  // 存储10个卫星列表项
+
+	// Satellite parameter screen
+	lv_obj_t *sat_param_screen;     // 卫星参数显示屏幕
+	lv_obj_t *sat_param_cont;       // 参数显示容器
+	lv_obj_t *sat_param_title;      // 标题
+	lv_obj_t *sat_name_label;       // 卫星名称
+	lv_obj_t *elevation_label;      // 俯仰角标签
+	lv_obj_t *elevation_value;      // 俯仰角数值
+	lv_obj_t *azimuth_label;        // 方位角标签
+	lv_obj_t *azimuth_value;        // 方位角数值
+	lv_obj_t *range_label;          // 距离标签
+	lv_obj_t *range_value;          // 距离数值
+	lv_obj_t *velocity_label;       // 速度标签
+	lv_obj_t *velocity_value;       // 速度数值
+	lv_obj_t *status_label;         // 状态标签
+	lv_obj_t *status_value;         // 状态数值
 }lv_ui;
 
 typedef void (*ui_setup_scr_t)(lv_ui * ui);
@@ -66,6 +83,9 @@ extern lv_ui guider_ui;
 
 void setup_scr_screen(lv_ui *ui);
 void setup_scr_orbit_tracking(lv_ui *ui);
+void setup_scr_sat_param(lv_ui *ui);
+void update_sat_param_screen(lv_ui *ui, const char* sat_name, double elevation, double azimuth, 
+                           double range, double velocity, const char* status);
 LV_IMG_DECLARE(_orbit_alpha_60x60);
 LV_IMG_DECLARE(_time_alpha_60x60);
 LV_IMG_DECLARE(_file_search_alpha_60x60);
