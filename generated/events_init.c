@@ -20,6 +20,10 @@
 #endif
 
 #include "gui_guider.h"
+#include "custom.h"
+#include "esp_log.h"
+
+static const char *TAG = "sync_location";
 
 // 声明外部函数
 void setup_scr_sat_param(lv_ui *ui);
@@ -116,13 +120,170 @@ static void screen_list_1_item3_event_handler(lv_event_t *e)
     }
 }
 
+// 声明外部变量
+extern float latitude;
+extern float longitude;
+
+// 同步位置屏幕事件处理函数
+void sync_location_screen_event_handler(lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t *obj = lv_event_get_target(e);
+    
+    if (!obj) {
+        return;  // 静默返回，不打印错误
+    }
+
+    lv_ui *ui = (lv_ui *)lv_event_get_user_data(e);
+    if (!ui) {
+        return;  // 静默返回，不打印错误
+    }
+
+    switch (code) {
+        case LV_EVENT_SCREEN_LOADED:
+            // 屏幕加载完成时的处理
+            ESP_LOGI(TAG, "Sync location screen loaded");
+            break;
+            
+        case LV_EVENT_GESTURE:
+        {
+            lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
+            if (dir == LV_DIR_RIGHT) {
+                // 向右滑动返回主屏幕
+                ESP_LOGI(TAG, "Right swipe detected, returning to main screen");
+                if (ui->screen) {
+                    lv_scr_load_anim(ui->screen, LV_SCR_LOAD_ANIM_FADE_ON, 300, 0, false);
+                }
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+// 同步位置列表项0事件处理函数
+void sync_location_item0_event_handler(lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    if (code != LV_EVENT_CLICKED) {
+        return;
+    }
+
+    lv_obj_t *obj = lv_event_get_target(e);
+    if (!obj) {
+        return;  // 静默返回，不打印错误
+    }
+
+    lv_ui *ui = (lv_ui *)lv_event_get_user_data(e);
+    if (!ui) {
+        return;  // 静默返回，不打印错误
+    }
+
+    // 移除事件监听器，防止重复触发
+    lv_obj_remove_event_cb(obj, sync_location_item0_event_handler);
+
+    // 处理列表项0的点击事件
+    ESP_LOGI(TAG, "Sync location item0 clicked");
+    // 设置深圳经纬度
+    latitude = 22.3349f;
+    longitude = 114.1036f;
+    
+    // 返回主屏幕
+    if (ui->screen) {
+        lv_scr_load_anim(ui->screen, LV_SCR_LOAD_ANIM_FADE_ON, 300, 0, false);
+    }
+}
+
+// 同步位置列表项1事件处理函数
+void sync_location_item1_event_handler(lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    if (code != LV_EVENT_CLICKED) {
+        return;
+    }
+
+    lv_obj_t *obj = lv_event_get_target(e);
+    if (!obj) {
+        return;  // 静默返回，不打印错误
+    }
+
+    lv_ui *ui = (lv_ui *)lv_event_get_user_data(e);
+    if (!ui) {
+        return;  // 静默返回，不打印错误
+    }
+
+    // 移除事件监听器，防止重复触发
+    lv_obj_remove_event_cb(obj, sync_location_item1_event_handler);
+
+    // 处理列表项1的点击事件
+    ESP_LOGI(TAG, "Sync location item1 clicked");
+    // 设置哈尔滨经纬度
+    latitude = 45.4915f;
+    longitude = 126.3848f;
+    
+    // 返回主屏幕
+    if (ui->screen) {
+        lv_scr_load_anim(ui->screen, LV_SCR_LOAD_ANIM_FADE_ON, 300, 0, false);
+    }
+}
+
+// 同步位置列表项2事件处理函数
+void sync_location_item2_event_handler(lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    if (code != LV_EVENT_CLICKED) {
+        return;
+    }
+
+    lv_obj_t *obj = lv_event_get_target(e);
+    if (!obj) {
+        return;  // 静默返回，不打印错误
+    }
+
+    lv_ui *ui = (lv_ui *)lv_event_get_user_data(e);
+    if (!ui) {
+        return;  // 静默返回，不打印错误
+    }
+
+    // 移除事件监听器，防止重复触发
+    lv_obj_remove_event_cb(obj, sync_location_item2_event_handler);
+
+    // 处理列表项2的点击事件
+    ESP_LOGI(TAG, "Sync location item2 clicked");
+    // TODO: 实现GPS定位功能
+    
+    // 返回主屏幕
+    if (ui->screen) {
+        lv_scr_load_anim(ui->screen, LV_SCR_LOAD_ANIM_FADE_ON, 300, 0, false);
+    }
+}
+
+// 同步位置返回按钮事件处理函数
+void sync_location_back_btn_event_handler(lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t *obj = lv_event_get_target(e);
+    lv_obj_t *screen = lv_obj_get_screen(obj);
+    lv_ui *ui = (lv_ui *)lv_event_get_user_data(e);
+
+    if (code == LV_EVENT_CLICKED) {
+        // 处理返回按钮的点击事件
+        ESP_LOGI(TAG, "Sync location back button clicked");
+        lv_scr_load_anim(ui->screen, LV_SCR_LOAD_ANIM_FADE_ON, 300, 0, false);
+    }
+}
+
+// 修改主屏幕的GPS更新按钮事件处理
 static void screen_list_1_item4_event_handler(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     switch (code) {
     case LV_EVENT_CLICKED:
     {
-        // TODO: Add GPS location update functionality here
+        // 切换到位置同步屏幕
+        setup_scr_sync_location(&guider_ui);
+        lv_scr_load(guider_ui.sync_location_screen);
         break;
     }
     default:
@@ -286,6 +447,42 @@ void events_init_orbit_tracking(lv_ui *ui)
         if (ui->satellite_items[i] != NULL) {
             lv_obj_add_event_cb(ui->satellite_items[i], satellite_item_event_handler, LV_EVENT_CLICKED, NULL);
         }
+    }
+}
+
+void events_init_sync_location(lv_ui *ui)
+{
+    if (!ui) {
+        return;  // 静默返回，不打印错误
+    }
+
+    // 为屏幕添加事件处理
+    if (ui->sync_location_screen) {
+        // 先移除可能存在的旧事件处理函数
+        lv_obj_remove_event_cb(ui->sync_location_screen, sync_location_screen_event_handler);
+        // 只注册一次事件处理函数
+        lv_obj_add_event_cb(ui->sync_location_screen, sync_location_screen_event_handler, LV_EVENT_SCREEN_LOADED | LV_EVENT_GESTURE, ui);
+    }
+    
+    // 为列表项添加事件处理
+    if (ui->sync_location_item0) {
+        lv_obj_remove_event_cb(ui->sync_location_item0, sync_location_item0_event_handler);
+        lv_obj_add_event_cb(ui->sync_location_item0, sync_location_item0_event_handler, LV_EVENT_CLICKED, ui);
+    }
+    
+    if (ui->sync_location_item1) {
+        lv_obj_remove_event_cb(ui->sync_location_item1, sync_location_item1_event_handler);
+        lv_obj_add_event_cb(ui->sync_location_item1, sync_location_item1_event_handler, LV_EVENT_CLICKED, ui);
+    }
+    
+    if (ui->sync_location_item2) {
+        lv_obj_remove_event_cb(ui->sync_location_item2, sync_location_item2_event_handler);
+        lv_obj_add_event_cb(ui->sync_location_item2, sync_location_item2_event_handler, LV_EVENT_CLICKED, ui);
+    }
+    
+    // 为返回按钮添加事件处理
+    if (ui->sync_location_back_btn) {
+        lv_obj_add_event_cb(ui->sync_location_back_btn, sync_location_back_btn_event_handler, LV_EVENT_CLICKED, ui);
     }
 }
 

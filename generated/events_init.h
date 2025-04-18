@@ -22,8 +22,17 @@ void events_init_screen(lv_ui *ui);
 
 void events_init_orbit_tracking(lv_ui *ui);
 
+void events_init_sync_location(lv_ui *ui);
+
 // 声明list_container_event_handler函数
 void list_container_event_handler(lv_event_t *e);
+
+// Sync location screen event handlers
+void sync_location_screen_event_handler(lv_event_t *e);
+void sync_location_item0_event_handler(lv_event_t *e);
+void sync_location_item1_event_handler(lv_event_t *e);
+void sync_location_item2_event_handler(lv_event_t *e);
+void sync_location_back_btn_event_handler(lv_event_t *e);
 
 #ifdef __cplusplus
 }

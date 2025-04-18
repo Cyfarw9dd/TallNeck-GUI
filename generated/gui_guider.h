@@ -59,6 +59,16 @@ typedef struct
 	lv_obj_t *velocity_value;       // 速度数值
 	lv_obj_t *status_label;         // 状态标签
 	lv_obj_t *status_value;         // 状态数值
+
+	// Sync location screen
+	lv_obj_t *sync_location_screen;
+	bool sync_location_screen_del;
+	lv_obj_t *sync_location_cont;
+	lv_obj_t *sync_location_list;
+	lv_obj_t *sync_location_item0;  // 深圳
+	lv_obj_t *sync_location_item1;  // 哈尔滨
+	lv_obj_t *sync_location_item2;  // GPS定位
+	lv_obj_t *sync_location_back_btn;
 }lv_ui;
 
 typedef void (*ui_setup_scr_t)(lv_ui * ui);
@@ -86,6 +96,8 @@ void setup_scr_orbit_tracking(lv_ui *ui);
 void setup_scr_sat_param(lv_ui *ui);
 void update_sat_param_screen(lv_ui *ui, const char* sat_name, double elevation, double azimuth, 
                            double range, double velocity, const char* status);
+void setup_scr_sync_location(lv_ui *ui);
+void update_location_coordinates(float lat, float lon);
 LV_IMG_DECLARE(_orbit_alpha_60x60);
 LV_IMG_DECLARE(_time_alpha_60x60);
 LV_IMG_DECLARE(_file_search_alpha_60x60);
