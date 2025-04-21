@@ -7,6 +7,14 @@ void setup_scr_sync_location(lv_ui *ui)
 {
     // 如果屏幕已经存在，先删除它
     if (ui->sync_location_screen != NULL) {
+        // 移除所有事件处理器
+        lv_obj_remove_event_cb(ui->sync_location_screen, sync_location_screen_event_handler);
+        lv_obj_remove_event_cb(ui->sync_location_item0, sync_location_item0_event_handler);
+        lv_obj_remove_event_cb(ui->sync_location_item1, sync_location_item1_event_handler);
+        lv_obj_remove_event_cb(ui->sync_location_item2, sync_location_item2_event_handler);
+        lv_obj_remove_event_cb(ui->sync_location_back_btn, sync_location_back_btn_event_handler);
+        
+        // 删除屏幕
         lv_obj_del(ui->sync_location_screen);
         ui->sync_location_screen = NULL;
     }
@@ -45,8 +53,8 @@ void setup_scr_sync_location(lv_ui *ui)
     lv_obj_set_scrollbar_mode(ui->sync_location_list, LV_SCROLLBAR_MODE_ACTIVE);
     
     // Create list items
-    ui->sync_location_item0 = lv_list_add_btn(ui->sync_location_list, LV_SYMBOL_GPS, "Shenzhen (22.3349, 114.1036)");
-    ui->sync_location_item1 = lv_list_add_btn(ui->sync_location_list, LV_SYMBOL_GPS, "Harbin (45.4915, 126.3848)");
+    ui->sync_location_item0 = lv_list_add_btn(ui->sync_location_list, LV_SYMBOL_GPS, "Shenzhen");
+    ui->sync_location_item1 = lv_list_add_btn(ui->sync_location_list, LV_SYMBOL_GPS, "Harbin");
     ui->sync_location_item2 = lv_list_add_btn(ui->sync_location_list, LV_SYMBOL_GPS, "Use GPS Location");
     
     // Create back button
@@ -57,10 +65,10 @@ void setup_scr_sync_location(lv_ui *ui)
     lv_label_set_text(back_label, "Back");
     lv_obj_center(back_label);
     
-    // Add event handlers
-    lv_obj_add_event_cb(ui->sync_location_screen, sync_location_screen_event_handler, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui->sync_location_item0, sync_location_item0_event_handler, LV_EVENT_CLICKED, NULL);
-    lv_obj_add_event_cb(ui->sync_location_item1, sync_location_item1_event_handler, LV_EVENT_CLICKED, NULL);
-    lv_obj_add_event_cb(ui->sync_location_item2, sync_location_item2_event_handler, LV_EVENT_CLICKED, NULL);
-    lv_obj_add_event_cb(ui->sync_location_back_btn, sync_location_back_btn_event_handler, LV_EVENT_CLICKED, NULL);
+    // Add event handlers with correct user data
+    lv_obj_add_event_cb(ui->sync_location_screen, sync_location_screen_event_handler, LV_EVENT_SCREEN_LOADED | LV_EVENT_GESTURE, ui);
+    lv_obj_add_event_cb(ui->sync_location_item0, sync_location_item0_event_handler, LV_EVENT_CLICKED, ui);
+    lv_obj_add_event_cb(ui->sync_location_item1, sync_location_item1_event_handler, LV_EVENT_CLICKED, ui);
+    lv_obj_add_event_cb(ui->sync_location_item2, sync_location_item2_event_handler, LV_EVENT_CLICKED, ui);
+    lv_obj_add_event_cb(ui->sync_location_back_btn, sync_location_back_btn_event_handler, LV_EVENT_CLICKED, ui);
 } 
