@@ -123,16 +123,16 @@ void setup_scr_orbit_tracking(lv_ui *ui)
     
     // Add satellite items
     const char* satellites[] = {
-        "OSCAR 7 (AO-7)",
-        "PHASE 3B (AO-10)",
-        "UOSAT 2 (UO-11)",
-        "LUSAT (LO-19)",
-        "EYESAT A (AO-27)",
-        "ITAMSAT (IO-26)",
-        "RADIO ROSTO (RS-15)",
-        "JAS-2 (FO-29)",
-        "TECHSAT 1B (GO-32)",
-        "ISS (ZARYA)"
+        "AO-7",
+        "AO-10",
+        "UO-11",
+        "LO-19",
+        "AO-27",
+        "IO-26",
+        "RS-15",
+        "FO-29",
+        "GO-32",
+        "ZARYA"
     };
     
     for (int i = 0; i < 10; i++) {
