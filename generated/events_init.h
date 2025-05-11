@@ -15,6 +15,7 @@ extern "C" {
 #endif
 
 #include "gui_guider.h"
+#include "globals.h"
 
 void events_init(lv_ui *ui);
 

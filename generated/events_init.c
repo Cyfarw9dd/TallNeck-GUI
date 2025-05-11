@@ -302,6 +302,13 @@ static void orbit_tracking_screen_event_handler(lv_event_t *e)
         switch(dir) {
         case LV_DIR_RIGHT:
         {
+            // 发送停止跟踪通知到轨道跟踪任务
+            if (orbit_trking_handler != NULL) {
+                ESP_LOGI(TAG, "Sending tracking stop notification from orbit screen");
+                xTaskNotify(orbit_trking_handler, END_ORB_TRKING, eSetValueWithOverwrite);
+                ESP_LOGI(TAG, "Tracking stop notification sent from orbit screen");
+            }
+            
             // 向右滑动返回主屏幕
             lv_scr_load(guider_ui.screen);
             break;
@@ -327,6 +334,13 @@ static void sat_param_screen_event_handler(lv_event_t *e)
         switch(dir) {
         case LV_DIR_RIGHT:
         {
+            // 发送停止跟踪通知到轨道跟踪任务
+            if (orbit_trking_handler != NULL) {
+                ESP_LOGI(TAG, "Sending tracking stop notification");
+                xTaskNotify(orbit_trking_handler, END_ORB_TRKING, eSetValueWithOverwrite);
+                ESP_LOGI(TAG, "Tracking stop notification sent");
+            }
+            
             // 向右滑动返回轨道跟踪屏幕
             lv_scr_load_anim(guider_ui.orbit_tracking_screen, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 300, 0, false);
             break;
@@ -385,9 +399,41 @@ static void satellite_item_event_handler(lv_event_t *e)
     lv_obj_t *target = lv_event_get_target(e);
     
     if (code == LV_EVENT_CLICKED) {
+        ESP_LOGI(TAG, "Satellite item clicked");
         // 获取被点击的列表项索引
         for (int i = 0; i < 10; i++) {
             if (target == guider_ui.satellite_items[i]) {
+                // 获取卫星名称
+                const char* sat_name = lv_list_get_btn_text(guider_ui.satellite_list, target);
+                ESP_LOGI(TAG, "Selected satellite: %s", sat_name);
+                
+                // 先发送开始跟踪通知到轨道跟踪任务
+                if (orbit_trking_handler != NULL) {
+                    ESP_LOGI(TAG, "Sending tracking start notification");
+                    xTaskNotify(orbit_trking_handler, START_ORB_TRKING, eSetValueWithOverwrite);
+                    ESP_LOGI(TAG, "Tracking start notification sent");
+                    
+                    // 给轨道跟踪任务一些时间进入接收卫星名称的状态
+                    vTaskDelay(pdMS_TO_TICKS(100));
+                } else {
+                    ESP_LOGE(TAG, "orbit_trking_handler is NULL");
+                    return;
+                }
+                
+                // 发送卫星名称到跟踪任务
+                if (SatnameQueueHandler != NULL) {
+                    ESP_LOGI(TAG, "Sending satellite name to queue");
+                    BaseType_t xStatus = xQueueSend(SatnameQueueHandler, sat_name, pdMS_TO_TICKS(100));
+                    if (xStatus != pdPASS) {
+                        ESP_LOGE(TAG, "Failed to send satellite name to queue");
+                        return;
+                    }
+                    ESP_LOGI(TAG, "Satellite name sent to queue successfully");
+                } else {
+                    ESP_LOGE(TAG, "SatnameQueueHandler is NULL");
+                    return;
+                }
+                
                 // 确保参数显示屏幕已创建
                 if (guider_ui.sat_param_screen == NULL) {
                     setup_scr_sat_param(&guider_ui);
@@ -395,9 +441,6 @@ static void satellite_item_event_handler(lv_event_t *e)
                 
                 // 确保事件处理函数已注册
                 lv_obj_add_event_cb(guider_ui.sat_param_screen, sat_param_screen_event_handler, LV_EVENT_ALL, NULL);
-                
-                // 获取卫星名称
-                const char* sat_name = lv_list_get_btn_text(guider_ui.satellite_list, target);
                 
                 // 更新参数显示（这里使用示例数据，实际应该从卫星跟踪系统获取）
                 update_sat_param_screen(&guider_ui, sat_name, 45.0, 180.0, 1000.0, 7.8, "In View");
