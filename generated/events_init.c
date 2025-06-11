@@ -361,44 +361,78 @@ static void sat_param_screen_event_handler(lv_event_t *e)
     }
 }
 
-// 卫星参数更新
 void update_sat_param_screen(lv_ui *ui, const char* sat_name, double elevation, double azimuth, 
                            double range, double velocity, const char* status)
 {
-    // 使用单独的缓冲区避免冲突
-    char ele_buf[32];
-    char azi_buf[32];
-    char range_buf[32];
-    char vel_buf[32];
+    // 每个值使用独立的静态缓冲区
+    static char ele_buf[32];
+    static char azi_buf[32];
+    static char range_buf[32];
+    static char vel_buf[32];
+    static char time_buf[64];
     
-    // 设置卫星名称
+    // 更新卫星名称
     if (ui->sat_name_label) {
         lv_label_set_text(ui->sat_name_label, sat_name);
     }
     
-    // 使用与日志相同的格式
+    // 使用ASCII文本"d"代替度数符号
     if (ui->elevation_value) {
-        snprintf(ele_buf, sizeof(ele_buf), "%6.1f°", elevation);
+        snprintf(ele_buf, sizeof(ele_buf), "%6.1f d", elevation);
         lv_label_set_text(ui->elevation_value, ele_buf);
     }
     
     if (ui->azimuth_value) {
-        snprintf(azi_buf, sizeof(azi_buf), "%6.1f°", azimuth);
+        snprintf(azi_buf, sizeof(azi_buf), "%6.1f d", azimuth);
         lv_label_set_text(ui->azimuth_value, azi_buf);
     }
     
+    // 确保空间足够显示完整的范围值
     if (ui->range_value) {
         snprintf(range_buf, sizeof(range_buf), "%6.1f km", range);
         lv_label_set_text(ui->range_value, range_buf);
     }
     
+    // 确保空间足够显示完整的速度值
     if (ui->velocity_value) {
         snprintf(vel_buf, sizeof(vel_buf), "%6.3f km/s", velocity);
         lv_label_set_text(ui->velocity_value, vel_buf);
     }
     
+    // 更新状态值
     if (ui->status_value) {
         lv_label_set_text(ui->status_value, status);
+    }
+    
+    // 更新方向指示点位置
+    if (ui->direction_point) {
+        // 计算点在圆上的位置
+        // 方位角是从北方顺时针计算的，需要转换为标准坐标系
+        float angle_rad = (90.0 - azimuth) * 3.14159265 / 180.0;
+        
+        // 仰角决定距离圆心的距离 (90度对应圆心，0度或更小对应圆周)
+        float elev_normalized = (elevation < 0) ? 0 : (elevation > 90) ? 90 : elevation;
+        float distance = (90.0 - elev_normalized) / 90.0 * 70.0;  // 70是圆的半径
+        
+        // 计算坐标 (圆心是75,75)
+        int x = 75 + (int)(cos(angle_rad) * distance);
+        int y = 75 - (int)(sin(angle_rad) * distance);
+        
+        // 点的尺寸是10x10，所以调整位置使其中心对准计算的坐标
+        lv_obj_set_pos(ui->direction_point, x - 5, y - 5);
+    }
+    
+    // 更新最后一次更新时间
+    if (ui->update_time_label) {
+        // 获取当前时间
+        time_t now;
+        struct tm timeinfo;
+        time(&now);
+        localtime_r(&now, &timeinfo);
+        
+        snprintf(time_buf, sizeof(time_buf), "Updated: %02d:%02d:%02d", 
+                 timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
+        lv_label_set_text(ui->update_time_label, time_buf);
     }
 }
 

@@ -76,6 +76,9 @@ typedef struct
     
     lv_obj_t *date_label;
     lv_obj_t *date_value;
+
+	lv_obj_t *direction_point;     // 方向指示点
+    lv_obj_t *update_time_label;   // 更新时间标签
     
 }lv_ui;
 
