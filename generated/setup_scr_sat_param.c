@@ -2,6 +2,8 @@
 #include "lvgl.h"
 #include "widgets_init.h"
 #include "events_init.h"
+#include "globals.h"  
+#include "lvgl_display.h"
 
 void setup_scr_sat_param(lv_ui *ui)
 {
@@ -128,4 +130,4 @@ void setup_scr_sat_param(lv_ui *ui)
         lv_obj_set_style_text_font(values[i], &lv_font_NotoSans_VariableFont_wdth_wght_24, LV_PART_MAIN|LV_STATE_DEFAULT);
         lv_obj_set_style_text_color(values[i], lv_color_hex(0x0000FF), LV_PART_MAIN|LV_STATE_DEFAULT);
     }
-} 
+}

@@ -14,6 +14,7 @@
 #include "globals.h"
 #include "get_tle.h"
 #include "sgp4sdp4.h"
+#include "lvgl_display.h"
 
 #if LV_USE_GUIDER_SIMULATOR && LV_USE_FREEMASTER
 #include "freemaster_client.h"
@@ -323,11 +324,16 @@ static void orbit_tracking_screen_event_handler(lv_event_t *e)
     }
 }
 
-// 添加卫星参数屏幕的事件处理函数
 static void sat_param_screen_event_handler(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
+    
     switch (code) {
+    case LV_EVENT_SCREEN_LOADED:
+        // 屏幕加载时，使用缓存参数更新界面
+        update_sat_param_on_screen_load();
+        break;
+        
     case LV_EVENT_GESTURE:
     {
         lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
@@ -355,36 +361,40 @@ static void sat_param_screen_event_handler(lv_event_t *e)
     }
 }
 
-// 更新卫星参数显示函数
+// 卫星参数更新
 void update_sat_param_screen(lv_ui *ui, const char* sat_name, double elevation, double azimuth, 
                            double range, double velocity, const char* status)
 {
+    // 使用单独的缓冲区避免冲突
+    char ele_buf[32];
+    char azi_buf[32];
+    char range_buf[32];
+    char vel_buf[32];
+    
+    // 设置卫星名称
     if (ui->sat_name_label) {
         lv_label_set_text(ui->sat_name_label, sat_name);
     }
     
+    // 使用与日志相同的格式
     if (ui->elevation_value) {
-        static char buf[32];
-        lv_snprintf(buf, sizeof(buf), "%.1f°", elevation);
-        lv_label_set_text(ui->elevation_value, buf);
+        snprintf(ele_buf, sizeof(ele_buf), "%6.1f°", elevation);
+        lv_label_set_text(ui->elevation_value, ele_buf);
     }
     
     if (ui->azimuth_value) {
-        static char buf[32];
-        lv_snprintf(buf, sizeof(buf), "%.1f°", azimuth);
-        lv_label_set_text(ui->azimuth_value, buf);
+        snprintf(azi_buf, sizeof(azi_buf), "%6.1f°", azimuth);
+        lv_label_set_text(ui->azimuth_value, azi_buf);
     }
     
     if (ui->range_value) {
-        static char buf[32];
-        lv_snprintf(buf, sizeof(buf), "%.1f km", range);
-        lv_label_set_text(ui->range_value, buf);
+        snprintf(range_buf, sizeof(range_buf), "%6.1f km", range);
+        lv_label_set_text(ui->range_value, range_buf);
     }
     
     if (ui->velocity_value) {
-        static char buf[32];
-        lv_snprintf(buf, sizeof(buf), "%.3f km/s", velocity);
-        lv_label_set_text(ui->velocity_value, buf);
+        snprintf(vel_buf, sizeof(vel_buf), "%6.3f km/s", velocity);
+        lv_label_set_text(ui->velocity_value, vel_buf);
     }
     
     if (ui->status_value) {
@@ -443,7 +453,7 @@ static void satellite_item_event_handler(lv_event_t *e)
                 lv_obj_add_event_cb(guider_ui.sat_param_screen, sat_param_screen_event_handler, LV_EVENT_ALL, NULL);
                 
                 // 更新参数显示（这里使用示例数据，实际应该从卫星跟踪系统获取）
-                update_sat_param_screen(&guider_ui, sat_name, 45.0, 180.0, 1000.0, 7.8, "In View");
+                // update_sat_param_screen(&guider_ui, sat_name, 45.0, 180.0, 1000.0, 7.8, "In View");
                 
                 // 加载参数显示屏幕
                 lv_scr_load_anim(guider_ui.sat_param_screen, LV_SCR_LOAD_ANIM_MOVE_LEFT, 300, 0, false);

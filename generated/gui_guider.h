@@ -69,6 +69,14 @@ typedef struct
 	lv_obj_t *sync_location_item1;  // 哈尔滨
 	lv_obj_t *sync_location_item2;  // GPS定位
 	lv_obj_t *sync_location_back_btn;
+    
+    // 新添加的元素
+    lv_obj_t *utc_label;
+    lv_obj_t *utc_value;
+    
+    lv_obj_t *date_label;
+    lv_obj_t *date_value;
+    
 }lv_ui;
 
 typedef void (*ui_setup_scr_t)(lv_ui * ui);
